@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.huahai.oracle.dao.UserMapper">
+	<!--数据插入  -->
+	<insert id="insert" parameterType="cn.tedu.store.bean.User">
+		INSERT INTO t_user
+		 (username,password,email,phone,image,gender,create_user,create_time,modified_user,modified_time)
+		VALUES(#{username},#{password},#{email},#{phone},#{image},#{gender},#{createUser},#{createTime},#{modifiedUser},#{modifiedTime});
+	</insert>
+	<!--数据查询  -->
+	<select id="selectByUsername" resultType="cn.tedu.store.bean.User" parameterType="String">
+		SELECT 
+			id,username,password,email,phone,image,gender,
+			create_user as createUser,
+			create_time as createTime,
+			modified_user as modifiedUser,
+			modified_time as modifiedTime
+		FROM t_user
+		WHERE 
+		username=#{username};
+	</select>
+	<!-- 邮箱验证唯一 -->
+	<select id="selectByEmail" resultType="Integer">
+		SELECT
+		 count(email) 
+	 	FROM t_user 
+		WHERE email=#{email};
+	</select>
+	<!-- 手机号码验证唯一 -->
+	<select id="selectByPhone" resultType="Integer">
+		SELECT
+		 count(phone) 
+	 	FROM t_user 
+		WHERE phone=#{phone};
+	</select>
+	<!-- 更新用户数据 -->
+	<update id="update" parameterType="cn.tedu.store.bean.User">
+		UPDATE t_user
+		SET 
+			<if test="password!=null">
+				password=#{password},
+			</if>
+			<if test="username!=null">
+				username=#{username},
+			</if>
+			<if test="gender!=null">
+				gender=#{gender},
+			</if>
+			<if test="email!=null">
+				email=#{email},
+			</if>
+			<if test="phone!=null">
+				phone=#{phone},
+			</if>
+			modified_user=#{modifiedUser},
+			modified_time=#{modifiedTime} 
+		where
+			id=#{id}
+	</update>
+	<!--  根据ID 查找用户信息-->
+	<select id="selectAllById" resultType="cn.tedu.store.bean.User">
+		SELECT 
+			id,username,password,email,phone,image,gender,
+			create_user as createUser,
+			create_time as createTime,
+			modified_user as modifiedUser,
+			modified_time as modifiedTime
+		FROM t_user
+		WHERE 
+		id=#{id};
+	</select>
+	<!-- 根据id修改图片路径 -->
+	<!-- void updataImageById(@Param("image") String image,@Param("id") String id); -->
+	<update id = "updataImageById">
+		UPDATE t_user
+		SET image=#{image}
+		WHERE id=#{id};
+	</update>
+	<!-- /**
+	  * 查询出所有的用户信息
+	  * @return
+	  */
+	User selectAll();  -->
+	<select id="selectAll" resultType="cn.tedu.store.bean.User">
+		SELECT 
+			id,username,password,email,phone,image,gender,
+			create_user as createUser,
+			create_time as createTime,
+			modified_user as modifiedUser,
+			modified_time as modifiedTime
+ 		FROM t_user;
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

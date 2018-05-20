@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.store.mapper.CartMapper">
+	<!-- 插入购物车数据 -->
+	<!-- void insertCart(Cart cart); -->
+	<select id="insertCart">
+		INSERT INTO t_cart(
+			uid,goods_id,count,
+			created_user,created_time,
+			modified_user,modified_time
+		)VALUES(
+			#{uid},
+			#{goodsId},
+			#{count},
+			#{createdUser},
+			#{createdTime},
+			#{modifiedUser},
+			#{modifiedTime}
+		);
+	</select>
+	<!-- 查询uid下面的商品信息 -->
+	<!-- List<CartVo> selectCart(Integer uid); -->
+	<select id="selectCart" resultType="cn.tedu.store.vo.CartVo">
+		SELECT
+			t_cart.id as id,
+			t_cart.uid as uid,
+			t_cart.goods_id as goodsId,
+			image,
+			title,
+			price,
+			count
+		FROM 
+			t_cart,t_goods
+		WHERE
+			t_cart.goods_id = t_goods.id
+		AND 
+			t_cart.uid = #{uid};
+	</select>
+	<!-- //	根据id删除购物车数据
+	void deleteById(Integer id); -->
+	<delete id="deleteById">
+		DELETE FROM t_cart WHERE id = #{id};
+	</delete>
+	<!--//	根据id数组删除购物车数据  
+	void deleteBatchById(int[] id); -->
+	<delete id="deleteBatchById">
+		DELETE FROM t_cart WHERE id IN
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>;
+	</delete>
+	<!--根据id修改购物车商品数量
+	void updateCountById(@Param("id") Integer id,@Param("count") Integer count);  -->
+	<update id="updateCountById">
+		UPDATE t_cart SET count=#{count} WHERE id = #{id};
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

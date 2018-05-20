@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.store.mapper.OrderMapper">
+	<!-- //插入订单 void insertOrder(Order order), -->
+	<insert id="insertOrder" parameterType="cn.tedu.store.bean.Order"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO t_order(
+		uid,tradetime
+		)VALUES(#{uid},now());
+	</insert>
+	<!-- // 插入订单项 void insertOrderItem(OrderItem orderItem), -->
+	<insert id="insertOrderItem" parameterType="cn.tedu.store.bean.OrderItem">
+		INSERT INTO
+		t_orderItem(
+			id,uid,goodsid,image,title,price,count,
+			paymentstatus,orderstatus,orderid,
+			created_user,create_time,
+			modified_user,modified_time
+		)VALUES(
+			#{id},#{uid},#{goodsid},#{image},#{title},#{price},#{count},
+			#{paymentstatus},#{orderstatus},#{orderid},
+			#{createdUser},#{createTime},#{modifiedUser},#{modifiedTime}
+		);
+	</insert>
+	<!--void updatePaymentStatus(Integer oId);
+	根据OrderId修改付款状态 -->
+	<!--调用存储过程  -->
+	<!-- delimiter $$
+	  create procedure updateItem1(poid int)
+	  	begin 
+	  		update
+	  			t_orderItem
+	  		set
+	  			paymentStatus=1
+	  		where
+	   orderid = poid;
+	   end $$ -->
+	<update id="updatePaymentStatus">
+		{call updateItem1(#{oId})}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
